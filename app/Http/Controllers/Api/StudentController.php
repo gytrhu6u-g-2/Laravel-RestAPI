@@ -177,4 +177,52 @@ class StudentController extends Controller
             ], 404);
         }
     }
+
+
+    /**
+     * 検索
+     * @param request
+     * @return json
+     */
+    public function search(Request $request)
+    {
+        $data = $request->all();
+
+        $results = DB::table('students')
+            ->select('*')
+            ->where(function ($query) use ($data) {
+                if (isset($data['name']) &&  $data['name'] !== null) {
+                    $query->where('name', 'like', '%' . $data['name'] . '%');
+                }
+            })
+            ->where(function ($query) use ($data) {
+                if (isset($data['course']) &&  $data['course'] !== null) {
+                    $query->where('course', 'like', '%' . $data['course'] . '%');
+                }
+            })
+            ->where(function ($query) use ($data) {
+                if (isset($data['email']) &&  $data['email'] !== null) {
+                    $query->where('email', 'like', '%' . $data['email'] . '%');
+                }
+            })
+            ->where(function ($query) use ($data) {
+                if (isset($data['phone']) &&  $data['phone'] !== null) {
+                    $query->where('phone', 'like', '%' . $data['phone'] . '%');
+                }
+            })
+            ->orderBy('students.id', 'ASC')
+            ->get();
+
+        if ($results->isEmpty()) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Data Not Found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 202,
+            'student' => $results
+        ], 202);
+    }
 }

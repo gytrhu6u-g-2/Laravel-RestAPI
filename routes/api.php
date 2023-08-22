@@ -29,3 +29,5 @@ Route::get('students/{id}', [StudentController::class, 'show'])->name('show');
 Route::put('students/{id}/edit', [StudentController::class, 'update'])->name('update');
 // delete
 Route::delete('students/{id}/delete', [StudentController::class, 'delete'])->name('delete');
+// serach
+Route::post('students/search', [StudentController::class, 'search'])->name('search');
